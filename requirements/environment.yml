@@ -1,0 +1,10 @@
+name: xb_planning
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - scipy
+  - numpy
+  - cvxpy
+  - matplotlib
