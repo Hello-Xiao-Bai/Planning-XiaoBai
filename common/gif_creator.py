@@ -1,5 +1,12 @@
 from PIL import Image
 import os
+import sys
+import pathlib
+
+root_dir = pathlib.Path(__file__).parent.parent
+sys.path.append(str(root_dir))
+
+from common.plot_util import *
 
 
 def get_gif_path(file_path, gif_name):
@@ -88,7 +95,7 @@ class GifCreator:
     def clear_gif_folder(self):
         delete_folder_contents(self.image_folder_path)
 
-    def create_gif(self):
+    def create_gif(self, pause_time=PAUSE_TIME):
         print(self.image_folder_path)
         print(self.gif_path)
-        create_gif(self.image_folder_path, self.gif_path)
+        create_gif(self.image_folder_path, self.gif_path, duration=pause_time * 1000)

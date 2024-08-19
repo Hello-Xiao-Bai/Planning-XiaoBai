@@ -27,9 +27,8 @@ def get_car_corners(x, y, theta):
                 (LENGTH - BACK_TO_WHEEL),
                 (LENGTH - BACK_TO_WHEEL),
                 -BACK_TO_WHEEL,
-                -BACK_TO_WHEEL,
             ],
-            [WIDTH / 2, WIDTH / 2, -WIDTH / 2, -WIDTH / 2, WIDTH / 2],
+            [WIDTH / 2, WIDTH / 2, -WIDTH / 2, -WIDTH / 2],
         ]
     )
     Rot1 = np.array([[cos(theta), sin(theta)], [-sin(theta), cos(theta)]])

@@ -70,8 +70,15 @@ def get_car_plot_points(x, y, theta, steer=0.0):  # pragma: no cover
     rl_wheel[1, :] += y
 
     outline = get_car_corners(x, y, theta)
+    outline = np.concatenate((outline, outline[:, 0:1]), axis=1)
 
     return outline, fr_wheel, rr_wheel, fl_wheel, rl_wheel
+
+
+def plot_point(points, color, label=None):
+    xs = [p.x for p in points]
+    ys = [p.y for p in points]
+    plt.plot(xs, ys, color=color, label=label)
 
 
 def plot_car(x, y, theta, steer=0.0, car_color="-k"):

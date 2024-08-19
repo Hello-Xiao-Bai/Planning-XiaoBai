@@ -197,7 +197,7 @@ def dijkstra_planning(sx, sy, gx, gy, road_map, sample_x, sample_y):
                 lambda event: [exit(0) if event.key == "escape" else None],
             )
             plt.plot(current.x, current.y, "xg")
-            plt.savefig(gif_path.get_image_path())
+            plt.savefig(gif_creator.get_image_path())
             plt.pause(0.001)
 
         if c_id == (len(road_map) - 1):
@@ -352,12 +352,12 @@ def prm(rng=None):
 
     if show_animation:
         plt.plot(rx, ry, "-r")
-        plt.savefig(gif_path.get_image_path())
+        plt.savefig(gif_creator.get_image_path())
         plt.pause(0.001)
-        gif_path.create_gif()
+        gif_creator.create_gif()
         plt.show()
 
 
 if __name__ == "__main__":
-    gif_path = GifCreator(file_path)
+    gif_creator = GifCreator(file_path)
     prm()
