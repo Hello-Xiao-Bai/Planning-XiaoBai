@@ -4,6 +4,12 @@ from math import cos, sin, tan, pi
 import copy
 import numpy as np
 
+def get_xy_matrix(points):
+    xs = [p.x for p in points]
+    ys = [p.y for p in points]
+    points_tuples = [xs, ys]
+
+    return np.array(points_tuples)
 
 class Point:
     def __init__(self, x=0.0, y=0.0, heading=0.0, v=0.0, t=0.0, steer=0.0):
