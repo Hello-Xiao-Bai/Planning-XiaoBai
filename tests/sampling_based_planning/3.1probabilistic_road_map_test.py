@@ -359,5 +359,6 @@ def prm(rng=None):
 
 
 if __name__ == "__main__":
-    gif_creator = GifCreator(file_path)
+    fig, ax = plt.subplots()
+    gif_creator = GifCreator(file_path, fig, ax)
     prm()

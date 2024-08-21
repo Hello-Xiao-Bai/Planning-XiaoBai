@@ -59,7 +59,7 @@ class Circle:
         return self.c + self.r * d / np.linalg.norm(d)
 
 
-def run_gjk(shape1, shape2, a0=np.array([1, 0]), eps=0.001):
+def run_gjk(shape1, shape2, a0=np.array([1, 0]), gif_creator=None, eps=0.001):
     """Gilbert-Johnson-Keerthi distance algorithm.
     Parameters:
         shape1, shape2: shapes to calculate distance between
@@ -86,6 +86,15 @@ def run_gjk(shape1, shape2, a0=np.array([1, 0]), eps=0.001):
     S1 = np.zeros((2, 3))
     S2 = np.zeros((2, 3))
 
+    if gif_creator:
+        gif_creator.ax.add_patch(
+            plt.Polygon(shape1.vertices.T, color="k", fill=False, closed=True)
+        )
+        gif_creator.ax.add_patch(
+            plt.Circle(shape2.c, shape2.r, edgecolor="k", fill=False)
+        )
+
+    iterate = 0
     # iterate until w is no more extreme in the direction v than v itself
     while v.dot(v) - v.dot(w) > eps:
         # add new point to simplex
@@ -98,6 +107,43 @@ def run_gjk(shape1, shape2, a0=np.array([1, 0]), eps=0.001):
         # compute closest point to the origin in the simplex, as well the
         # smallest simplex that supports that point
         v, bitset, contains_origin, coeffs = johnson(S, bitset)
+        if gif_creator:
+            plt.axis("equal")
+            gif_creator.ax.set_xlim([-5, 15])
+            gif_creator.ax.set_ylim([-5, 15])
+            gif_creator.ax.add_patch(
+                plt.Circle(
+                    (w[0], w[1]),
+                    0.2,
+                    edgecolor="purple",
+                    facecolor="purple",
+                    fill=True,
+                    label="w" if iterate == 0 else None,
+                )
+            )
+            gif_creator.ax.add_patch(
+                plt.Circle(
+                    (a[0], a[1]),
+                    0.2,
+                    edgecolor="r",
+                    facecolor="r",
+                    fill=True,
+                    label="a" if iterate == 0 else None,
+                )
+            )
+            gif_creator.ax.add_patch(
+                plt.Circle(
+                    (b[0], b[1]),
+                    0.2,
+                    edgecolor="b",
+                    facecolor="b",
+                    fill=True,
+                    label="b" if iterate == 0 else None,
+                )
+            )
+            plt.legend()
+            gif_creator.savefig()
+            plt.pause(0.5)
 
         if contains_origin:
             break
@@ -106,6 +152,7 @@ def run_gjk(shape1, shape2, a0=np.array([1, 0]), eps=0.001):
         a = shape1.support(-v)
         b = shape2.support(v)
         w = a - b
+        iterate += 1
 
     # compute closest points using the same coefficients as the closest point
     # of the Minowski diff to the origin v
@@ -179,5 +226,3 @@ def johnson(points, this_bitset):
             v = coeffs.dot(points[:, idx].T)
             contains_origin = bitset == 0b111
             return v, bitset, contains_origin, coeffs
-
-

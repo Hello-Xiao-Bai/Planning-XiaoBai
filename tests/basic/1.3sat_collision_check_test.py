@@ -52,5 +52,6 @@ def aabb_and_sat():
 
 
 if __name__ == "__main__":
-    gif_creator = GifCreator(file_path)
+    fig, ax = plt.subplots()
+    gif_creator = GifCreator(file_path, fig, ax)
     aabb_and_sat()

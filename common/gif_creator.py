@@ -79,7 +79,7 @@ def delete_folder_contents(folder_path):
 
 
 class GifCreator:
-    def __init__(self, file_path):
+    def __init__(self, file_path, fig, ax):
         self.gif_frame = 1000
         self.file_path = file_path
         self.file_name = file_path.stem
@@ -88,6 +88,9 @@ class GifCreator:
         self.gif_path = get_gif_path(self.file_path, str(self.file_name))
         self.clear_gif_folder()
 
+        self.fig = fig
+        self.ax = ax
+
     def get_image_path(self):
         self.gif_frame += 1
         return get_image_folder_path(self.file_path) + "/" + str(self.gif_frame)
@@ -95,7 +98,8 @@ class GifCreator:
     def clear_gif_folder(self):
         delete_folder_contents(self.image_folder_path)
 
+    def savefig(self):
+        plt.savefig(self.get_image_path())
+
     def create_gif(self, pause_time=PAUSE_TIME):
-        print(self.image_folder_path)
-        print(self.gif_path)
         create_gif(self.image_folder_path, self.gif_path, duration=pause_time * 1000)
