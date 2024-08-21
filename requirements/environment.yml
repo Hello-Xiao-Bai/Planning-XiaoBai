@@ -1,4 +1,4 @@
-name: xb_planning
+name: Planning-XiaoBai
 channels:
   - conda-forge
 dependencies:
