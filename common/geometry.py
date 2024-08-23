@@ -3,6 +3,7 @@ import pathlib
 from math import cos, sin, tan, hypot, atan2, fabs, pi
 import copy
 import numpy as np
+from typing import List, Tuple
 
 EPSILON = 1e-6
 MAX_VALUE = sys.maxsize
@@ -117,7 +118,7 @@ class Vector:
 
 
 class LineSegment:
-    def __init__(self, start_vec, end_vec):
+    def __init__(self, start_vec: Vector, end_vec: Vector):
         self.start = start_vec
         self.end = end_vec
         dx = end_vec.x - start_vec.x
@@ -130,7 +131,7 @@ class LineSegment:
         )
         self.heading = self.unit_direction.angle()
 
-    def distance_to(self, vec):
+    def distance_to(self, vec: Vector):
         if self.length < EPSILON:
             return self.start.distance_to(vec)
 
@@ -141,12 +142,12 @@ class LineSegment:
         if proj > self.length:
             return self.end.distance_to(vec)
 
-        return self.unit_direction.cross_prod(start_to_p)
+        return fabs(self.unit_direction.cross_prod(start_to_p))
 
-    def project_onto_unit(self, vec):
+    def project_onto_unit(self, vec: Vector):
         return self.unit_direction.inner_prod(vec - self.start)
 
-    def product_onto_unit(self, vec):
+    def product_onto_unit(self, vec: Vector):
         return self.unit_direction.cross_prod(vec - self.start)
 
 
@@ -181,7 +182,7 @@ class Box:
 
         corners[0, :] += x
         corners[1, :] += y
-        self.corners = []
+        self.corners: list[Point] = []
         for i in range(4):
             point = Point(corners[0][i], corners[1][i], heading)
             self.corners.append(point)
@@ -232,3 +233,104 @@ class Box:
         plot_corners = copy.deepcopy(self.corners)
         plot_corners.append(self.corners[0])
         return plot_corners
+
+
+class Polyline:
+    def __init__(self, points: List[Point]):
+        self.points = points
+        self.segments: List[LineSegment] = []
+        for i in range(1, len(points)):
+            start = Vector(points[i - 1].x, points[i - 1].y)
+            end = Vector(points[i].x, points[i].y)
+            self.segments.append(LineSegment(start, end))
+
+    def length(self) -> float:
+        return self.points[-1].s
+
+    def get_smooth_point(self, s: float):
+
+        if s <= 0.0:
+            return copy.deepcopy(self.points[0])
+
+        if s >= self.length():
+            return copy.deepcopy(self.points[-1])
+
+        low_index = self.binary_search(s)
+
+        if low_index == len(self.points) - 1:
+            return copy.deepcopy(self.points[-1])
+
+        prev_point = self.points[low_index - 1]
+        delta_s = s - prev_point.s
+
+        if delta_s < EPSILON:
+            return prev_point
+
+        ratio = delta_s / (self.points[low_index].s - prev_point.s)
+        interpolation = lambda x1, x2: (x2 - x1) * ratio
+
+        smooth_p = copy.deepcopy(prev_point)
+        smooth_p.x += interpolation(prev_point.x, self.points[low_index].x)
+        smooth_p.y += interpolation(prev_point.y, self.points[low_index].y)
+        smooth_p.heading += interpolation(
+            prev_point.heading, self.points[low_index].heading
+        )
+        smooth_p.s += interpolation(prev_point.s, self.points[low_index].s)
+        smooth_p.t += interpolation(prev_point.t, self.points[low_index].t)
+        smooth_p.v += interpolation(prev_point.v, self.points[low_index].v)
+        smooth_p.steer += interpolation(prev_point.steer, self.points[low_index].steer)
+
+        return smooth_p
+
+    def xy_to_sl(self, x, y):
+        min_dis = MAX_VALUE
+        vec = Vector(x, y)
+        for i in range(len(self.segments)):
+            current_min_dis = self.segments[i].distance_to(vec)
+            if current_min_dis < min_dis:
+                min_index = i
+                min_dis = current_min_dis
+                nearest_seg = self.segments[i]
+
+        prod = nearest_seg.product_onto_unit(vec)
+        proj = nearest_seg.project_onto_unit(vec)
+
+        if min_index == 0:
+            accumulate_s = min(proj, nearest_seg.length)
+            if proj < 0:
+                lateral = prod
+            else:
+                lateral = min_dis if prod > 0 else -min_dis
+        elif min_index == len(self.segments) - 1:
+            accumulate_s = self.points[min_index].s + max(0.0, proj)
+            if proj > 0:
+                lateral = prod
+            else:
+                lateral = min_dis if prod > 0 else -min_dis
+        else:
+            accumulate_s = self.points[min_index].s + max(
+                0.0, min(proj, nearest_seg.length)
+            )
+            lateral = prod
+
+        return accumulate_s, lateral
+
+    def sl_to_xy(self, s, l):
+        target_p = self.get_smooth_point(s)
+        x = target_p.x - sin(target_p.heading) * l
+        y = target_p.y + cos(target_p.heading) * l
+
+        return x, y
+
+    def binary_search(self, s: float) -> int:
+        left, right = 0, len(self.points) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if self.points[mid].s < s:
+                left = mid + 1
+            elif self.points[mid].s > s:
+                right = mid - 1
+            else:
+                return mid
+
+        return left

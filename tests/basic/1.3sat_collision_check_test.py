@@ -18,9 +18,6 @@ from common.gif_creator import *
 
 
 def aabb_and_sat():
-    fig = plt.figure()
-    plt.title("AABB and SAT Collision Check")
-
     for i in range(0, 10):
         plt.cla()
         x1 = random.uniform(0.0, 10.0)
@@ -40,8 +37,11 @@ def aabb_and_sat():
         has_overlap = box1.has_overlap(box2)
 
         color = "r" if has_overlap else "k"
-        plot_point(box1.get_plot_corners(), color)
-        plot_point(box2.get_plot_corners(), color)
+        xs, ys = get_xy_matrix(box1.get_plot_corners())
+        plt.plot(xs, ys, color=color)
+        xs, ys = get_xy_matrix(box2.get_plot_corners())
+        plt.plot(xs, ys, color=color)
+        plt.title("AABB and SAT Collision Check")
         plt.axis("equal")
         plt.xlim(-5, 15)
         plt.ylim(-5, 15)
