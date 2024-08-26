@@ -18,10 +18,10 @@ def get_xy_matrix(points):
 
 
 class Point:
-    def __init__(self, x=0.0, y=0.0, heading=0.0, s=0.0, v=0.0, t=0.0, steer=0.0):
+    def __init__(self, x=0.0, y=0.0, theta=0.0, s=0.0, v=0.0, t=0.0, steer=0.0):
         self.x = x
         self.y = y
-        self.heading = heading
+        self.theta = theta
         self.s = s
         self.v = v
         self.t = t
@@ -29,6 +29,14 @@ class Point:
 
     def distance_to(self, x, y):
         return hypot(self.x - x, self.y - y)
+
+
+class FrenetFramePoint:
+    def __init__(self, s=0.0, l=0.0, dl=0.0, ddl=0.0):
+        self.s = s
+        self.l = l
+        self.dl = dl
+        self.ddl = ddl
 
 
 class Vector:
