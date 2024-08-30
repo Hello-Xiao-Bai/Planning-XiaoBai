@@ -13,7 +13,7 @@ from common.plot_util import *
 from common.kinematics import *
 from common.common_util import *
 from common.gif_creator import *
-from curves.quintic_polynomial import QuinticPolynomial
+from curves.quintic_polynomial_test import QuinticPolynomial
 
 
 def generate_trajectories(start_p, trajectory_length, max_l, min_l, delta_l, delta_s):

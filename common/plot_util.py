@@ -105,8 +105,8 @@ def plot_car(x, y, theta, steer=0.0, car_color="-k"):
     plt.plot(x, y, "r*")
 
 
-def get_axes_limits(points):
-    each_corners = [get_car_corners(p.x, p.y, p.theta) for p in points]
+def get_axes_limits(xs, ys, thetas):
+    each_corners = [get_car_corners(x, y, theta) for x, y, theta in zip(xs, ys, thetas)]
     all_corners = np.concatenate(each_corners, axis=1)
 
     buff = 1.0
@@ -136,7 +136,10 @@ def save_gif(save_path, anim):
 
 
 def animation_car(fig, points, car_color="k", traj_color="r", save_path=None):
-    x_min, x_max, y_min, y_max = get_axes_limits(points)
+    xs = [p.x for p in points]
+    ys = [p.y for p in points]
+    thetas = [p.theta for p in points]
+    x_min, x_max, y_min, y_max = get_axes_limits(xs, ys, thetas)
     axes = fig.gca()
     axes.set_xlim(x_min, x_max)
     axes.set_ylim(y_min, y_max)
