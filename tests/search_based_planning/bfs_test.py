@@ -318,4 +318,6 @@ def main():
 
 
 if __name__ == "__main__":
+    fig, ax = plt.subplots()
+    gif_creator = GifCreator(file_path, fig, ax)
     main()
