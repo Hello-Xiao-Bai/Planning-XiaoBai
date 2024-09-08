@@ -74,7 +74,7 @@ def newton_method(
     symbols: list[sm.core.symbol.Symbol],
     x0: dict[sm.core.symbol.Symbol, float],
     iterations: int = 100,
-) -> dict[sm.core.symbol.Symbol, float] or None:
+):
     """
     Perform Newton's method to find the solution to the optimization problem.
 
@@ -118,7 +118,7 @@ def gradient_descent(
     x0: dict[sm.core.symbol.Symbol, float],
     learning_rate: float = 0.001,
     iterations: int = 10000,
-) -> dict[sm.core.symbol.Symbol, float] or None:
+):
     """
     Performs gradient descent optimization to find the minimum of a given function.
 
