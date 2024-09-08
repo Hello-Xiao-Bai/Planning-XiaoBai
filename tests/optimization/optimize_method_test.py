@@ -159,14 +159,14 @@ def rosenbrock_function(x, y):
     return 100 * (y - x**2) ** 2 + (1 - x) ** 2
 
 
-def solve(method):
+def optimize(method):
     x, y = sm.symbols("x y")
-    Gamma = [x, y]
-    objective = rosenbrock_function(x, y)
+    symbols = [x, y]
 
-    solution, x_star = method(objective, Gamma, {x: -2, y: 2})
+    solution, x_star = method(rosenbrock_function(x, y), symbols, {x: -2, y: 2})
 
     for x_i in x_star.values():
+        plt.cla()
         xs, ys, zs = [], [], []
         ax = fig.add_subplot(111, projection="3d")
         xs, ys = np.meshgrid(np.arange(-10, 10, 0.1), np.arange(-5, 2, 0.1))
@@ -206,6 +206,6 @@ def solve(method):
 if __name__ == "__main__":
     fig, ax = plt.subplots()
     gif_creator = GifCreator(file_path, fig, ax)
-    solve(newton_method)
-    # solve(gradient_descent)
-    gif_creator.create_gif()
+    optimize(newton_method)
+    # optimize(gradient_descent)
+    gif_creator.create_gif(0.5)
