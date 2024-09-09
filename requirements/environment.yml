@@ -8,6 +8,4 @@ dependencies:
   - numpy
   - cvxpy
   - matplotlib
-  - cvxopt
-  - pandas
   - sympy
