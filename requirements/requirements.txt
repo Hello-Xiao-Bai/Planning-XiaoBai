@@ -2,3 +2,4 @@ numpy == 2.0.1
 scipy == 1.14.0
 matplotlib == 3.9.1.post1
 cvxpy == 1.5.2
+sympy == 1.13.2
