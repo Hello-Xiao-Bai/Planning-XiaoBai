@@ -2,7 +2,9 @@
 
 🧙课程配套教程:[自动驾驶小白说:动手学运动规划](https://www.helloxiaobai.cn/article/bmp)
 
-🏰官网:[自动驾驶小白说](https://www.helloxiaobai.cn/)! 欢迎Star，Follow，Share三连!
+🔥淘宝官方店铺: https://shop380995420.taobao.com
+
+🏰官网:[自动驾驶小白说](https://www.helloxiaobai.cn/)!
 
 🌠代码配合官网教程食用更佳！   
 
