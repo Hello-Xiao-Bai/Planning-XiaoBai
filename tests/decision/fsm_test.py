@@ -217,6 +217,8 @@ def plot_paths(final_path, raw_center_line, target_center_line, lane_boundary):
         for i in range(len(final_path_path_xy)):
             point = final_path_path_xy[i]
             plt.cla()
+            axes = fig.gca()
+            plt.axis("equal")
             plt.plot(
                 [p.x for p in final_path_path_xy[0:i]],
                 [p.y for p in final_path_path_xy[0:i]],
@@ -236,9 +238,6 @@ def plot_paths(final_path, raw_center_line, target_center_line, lane_boundary):
                 [p.l for p in target_center_line],
                 "g",
             )
-            axes = fig.gca()
-            axes.set_xlim(0, 70)
-            axes.set_ylim(-20.0, 20.0)
             plot_car(point.x, point.y, point.theta)
             plt.pause(0.01)
             gif_creator.savefig()

@@ -164,8 +164,8 @@ class Box:
         self.center = Point(center_x, center_y, heading)
         self.length = length
         self.width = width
-        self.sin_heading = sin(self.center.heading)
-        self.cos_heading = cos(self.center.heading)
+        self.sin_heading = sin(self.center.theta)
+        self.cos_heading = cos(self.center.theta)
 
         self.init_corners(center_x, center_y, heading, length, width)
         self.max_x = max(p.x for p in self.corners)
