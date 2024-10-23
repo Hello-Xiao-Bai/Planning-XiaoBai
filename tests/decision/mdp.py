@@ -183,7 +183,7 @@ def main():
         random_policy = 2 * np.ones(len(states))
         best_policy = policy_iteration(random_policy, gamma, n)
 
-    print(best_policy)
+    print("best policy is: ", best_policy)
 
     # Find the optimal route.
     best_route = [0]
